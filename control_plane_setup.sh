@@ -101,7 +101,8 @@ EOF
 systemctl daemon-reload
 systemctl enable kube-apiserver kube-controller-manager kube-scheduler
 systemctl start kube-apiserver kube-controller-manager kube-scheduler
-apt-get install -y nginx
+apt-get update
+apt-get install -y nginx --fix-missing
 cat > kubernetes.default.svc.cluster.local << EOF
 server {
   listen      80;
