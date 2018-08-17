@@ -117,7 +117,7 @@ mv kubernetes.default.svc.cluster.local /etc/nginx/sites-available/kubernetes.de
 ln -s /etc/nginx/sites-available/kubernetes.default.svc.cluster.local /etc/nginx/sites-enabled/
 systemctl restart nginx
 systemctl enable nginx
-cat << EOF | kubectl apply --kubeconfig admin.kubeconfig -f -
+cat << EOF | kubectl apply --kubeconfig /home/cloud_user/admin.kubeconfig -f -
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
@@ -138,7 +138,7 @@ rules:
     verbs:
       - "*"
 EOF
-cat << EOF | kubectl apply --kubeconfig admin.kubeconfig -f -
+cat << EOF | kubectl apply --kubeconfig /home/cloud_user/admin.kubeconfig -f -
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
