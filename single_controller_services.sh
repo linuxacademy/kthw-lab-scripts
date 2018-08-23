@@ -141,7 +141,7 @@ EOF
 systemctl daemon-reload
 systemctl enable kube-apiserver kube-controller-manager kube-scheduler
 systemctl start kube-apiserver kube-controller-manager kube-scheduler
-sleep 5
+until kubectl get componentstatuses --kubeconfig /home/cloud_user/admin.kubeconfig; do sleep 5; done
 cat << EOF | kubectl apply --kubeconfig /home/cloud_user/admin.kubeconfig -f -
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
