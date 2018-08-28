@@ -57,9 +57,9 @@ LimitCORE=infinity
 WantedBy=multi-user.target
 EOF
 #KUBELET
-mv /home/cloud_user${HOSTNAME}-key.pem /home/cloud_user${HOSTNAME}.pem /var/lib/kubelet/
-mv /home/cloud_user${HOSTNAME}.kubeconfig /var/lib/kubelet/kubeconfig
-mv /home/cloud_userca.pem /var/lib/kubernetes/
+mv /home/cloud_user/${HOSTNAME}-key.pem /home/cloud_user/${HOSTNAME}.pem /var/lib/kubelet/
+mv /home/cloud_user/${HOSTNAME}.kubeconfig /var/lib/kubelet/kubeconfig
+mv /home/cloud_user/ca.pem /var/lib/kubernetes/
 cat << EOF | tee /var/lib/kubelet/kubelet-config.yaml
 kind: KubeletConfiguration
 apiVersion: kubelet.config.k8s.io/v1beta1
@@ -105,7 +105,7 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 #KUBE_PROXY
-mv kube-proxy.kubeconfig /var/lib/kube-proxy/kubeconfig
+mv /home/cloud_user/kube-proxy.kubeconfig /var/lib/kube-proxy/kubeconfig
 cat << EOF | tee /var/lib/kube-proxy/kube-proxy-config.yaml
 kind: KubeProxyConfiguration
 apiVersion: kubeproxy.config.k8s.io/v1alpha1
