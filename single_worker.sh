@@ -20,8 +20,8 @@ tar -xvf crictl-v1.0.0-beta.0-linux-amd64.tar.gz -C /usr/local/bin/
 tar -xvf cni-plugins-amd64-v0.6.0.tgz -C /opt/cni/bin/
 tar -xvf containerd-1.1.0.linux-amd64.tar.gz -C /
 #CONTAINERD
-sudo mkdir -p /etc/containerd/
-cat << EOF | sudo tee /etc/containerd/config.toml
+mkdir -p /etc/containerd/
+cat << EOF | tee /etc/containerd/config.toml
 [plugins]
   [plugins.cri.containerd]
     snapshotter = "overlayfs"
@@ -34,7 +34,7 @@ cat << EOF | sudo tee /etc/containerd/config.toml
       runtime_engine = "/usr/local/bin/runsc"
       runtime_root = "/run/containerd/runsc"
 EOF
-cat << EOF | sudo tee /etc/systemd/system/containerd.service
+cat << EOF | tee /etc/systemd/system/containerd.service
 [Unit]
 Description=containerd container runtime
 Documentation=https://containerd.io
@@ -57,10 +57,10 @@ WantedBy=multi-user.target
 EOF
 #KUBELET
 HOSTNAME=$WORKER0_HOSTNAME
-sudo mv ${HOSTNAME}-key.pem ${HOSTNAME}.pem /var/lib/kubelet/
-sudo mv ${HOSTNAME}.kubeconfig /var/lib/kubelet/kubeconfig
-sudo mv ca.pem /var/lib/kubernetes/
-cat << EOF | sudo tee /var/lib/kubelet/kubelet-config.yaml
+mv ${HOSTNAME}-key.pem ${HOSTNAME}.pem /var/lib/kubelet/
+mv ${HOSTNAME}.kubeconfig /var/lib/kubelet/kubeconfig
+mv ca.pem /var/lib/kubernetes/
+cat << EOF | tee /var/lib/kubelet/kubelet-config.yaml
 kind: KubeletConfiguration
 apiVersion: kubelet.config.k8s.io/v1beta1
 authentication:
@@ -79,7 +79,7 @@ runtimeRequestTimeout: "15m"
 tlsCertFile: "/var/lib/kubelet/${HOSTNAME}.pem"
 tlsPrivateKeyFile: "/var/lib/kubelet/${HOSTNAME}-key.pem"
 EOF
-cat << EOF | sudo tee /etc/systemd/system/kubelet.service
+cat << EOF | tee /etc/systemd/system/kubelet.service
 [Unit]
 Description=Kubernetes Kubelet
 Documentation=https://github.com/kubernetes/kubernetes
@@ -105,8 +105,8 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 #KUBE_PROXY
-sudo mv kube-proxy.kubeconfig /var/lib/kube-proxy/kubeconfig
-cat << EOF | sudo tee /var/lib/kube-proxy/kube-proxy-config.yaml
+mv kube-proxy.kubeconfig /var/lib/kube-proxy/kubeconfig
+cat << EOF | tee /var/lib/kube-proxy/kube-proxy-config.yaml
 kind: KubeProxyConfiguration
 apiVersion: kubeproxy.config.k8s.io/v1alpha1
 clientConnection:
@@ -114,7 +114,7 @@ clientConnection:
 mode: "iptables"
 clusterCIDR: "10.200.0.0/16"
 EOF
-cat << EOF | sudo tee /etc/systemd/system/kube-proxy.service
+cat << EOF | tee /etc/systemd/system/kube-proxy.service
 [Unit]
 Description=Kubernetes Kube Proxy
 Documentation=https://github.com/kubernetes/kubernetes
@@ -129,6 +129,6 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 #START SERVICES
-sudo systemctl daemon-reload
-sudo systemctl enable containerd kubelet kube-proxy
-sudo systemctl start containerd kubelet kube-proxy
+systemctl daemon-reload
+systemctl enable containerd kubelet kube-proxy
+systemctl start containerd kubelet kube-proxy
