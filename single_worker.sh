@@ -1,5 +1,5 @@
 # Build services for a single worker lab setup
-# Required env vars: CONTROLLER_IP, INTERNAL_IP, WORKER0_IP, WORKER0_HOSTNAME
+# Required env vars: HOSTNAME
 #REQUIRED PACKAGES
 apt-get -y install socat conntrack ipset
 #INSTALL BINARIES
@@ -56,7 +56,6 @@ LimitCORE=infinity
 WantedBy=multi-user.target
 EOF
 #KUBELET
-HOSTNAME=$WORKER0_HOSTNAME
 mv ${HOSTNAME}-key.pem ${HOSTNAME}.pem /var/lib/kubelet/
 mv ${HOSTNAME}.kubeconfig /var/lib/kubelet/kubeconfig
 mv ca.pem /var/lib/kubernetes/
