@@ -1,5 +1,5 @@
 # Generate files for a single controller lab setup
-# Required env vars: CONTROLLER_IP, INTERNAL_IP, WORKER0_IP, WORKER1_IP
+# Required env vars: CONTROLLER_IP, CONTROLLER_PUBLIC_IP, INTERNAL_IP, WORKER0_IP, WORKER1_IP
 #GENERATE CERTS
 wget -q --show-progress --https-only --timestamping https://pkg.cfssl.org/R1.2/cfssl_linux-amd64 https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64
 chmod +x cfssl_linux-amd64 cfssljson_linux-amd64
@@ -43,7 +43,7 @@ cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=/tmp/ca-config.json -hostnam
 cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=/tmp/ca-config.json -profile=kubernetes /tmp/kube-controller-manager-csr.json | cfssljson -bare kube-controller-manager
 cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=/tmp/ca-config.json -profile=kubernetes /tmp/kube-proxy-csr.json | cfssljson -bare kube-proxy
 cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=/tmp/ca-config.json -profile=kubernetes /tmp/kube-scheduler-csr.json | cfssljson -bare kube-scheduler
-cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=/tmp/ca-config.json -hostname=10.32.0.1,$CONTROLLER_IP,,127.0.0.1,localhost,kubernetes.default -profile=kubernetes /tmp/kubernetes-csr.json | cfssljson -bare kubernetes
+cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=/tmp/ca-config.json -hostname=10.32.0.1,$CONTROLLER_IP,$CONTROLLER_PUBLIC_IP,127.0.0.1,localhost,kubernetes.default -profile=kubernetes /tmp/kubernetes-csr.json | cfssljson -bare kubernetes
 cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=/tmp/ca-config.json -profile=kubernetes /tmp/service-account-csr.json | cfssljson -bare service-account
 #GENERATE KUBECONFIGS
 wget https://storage.googleapis.com/kubernetes-release/release/v1.10.2/bin/linux/amd64/kubectl
