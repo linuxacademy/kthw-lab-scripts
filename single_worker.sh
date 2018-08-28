@@ -3,6 +3,7 @@
 #REQUIRED PACKAGES
 apt-get -y install socat conntrack ipset
 #INSTALL BINARIES
+cd /home/cloud_user
 wget -q --show-progress --https-only --timestamping \
   https://github.com/kubernetes-incubator/cri-tools/releases/download/v1.0.0-beta.0/crictl-v1.0.0-beta.0-linux-amd64.tar.gz \
   https://storage.googleapis.com/kubernetes-the-hard-way/runsc \
@@ -56,9 +57,9 @@ LimitCORE=infinity
 WantedBy=multi-user.target
 EOF
 #KUBELET
-mv ${HOSTNAME}-key.pem ${HOSTNAME}.pem /var/lib/kubelet/
-mv ${HOSTNAME}.kubeconfig /var/lib/kubelet/kubeconfig
-mv ca.pem /var/lib/kubernetes/
+mv /home/cloud_user${HOSTNAME}-key.pem /home/cloud_user${HOSTNAME}.pem /var/lib/kubelet/
+mv /home/cloud_user${HOSTNAME}.kubeconfig /var/lib/kubelet/kubeconfig
+mv /home/cloud_userca.pem /var/lib/kubernetes/
 cat << EOF | tee /var/lib/kubelet/kubelet-config.yaml
 kind: KubeletConfiguration
 apiVersion: kubelet.config.k8s.io/v1beta1
